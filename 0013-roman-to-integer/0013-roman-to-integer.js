@@ -4,19 +4,28 @@
  */
 
 var romanToInt = function(s) {
-    let symbol = [ "I", "V", "X", "L", "C", "D", "M"];
-    let value = [1, 5, 10, 50, 100, 500, 1000];
-    //IV, IX, XL, XC, CD, CM
+    let symbol = { 
+        "I" : 1,
+        "V" : 5,
+        "X" : 10,
+        "L" : 50,
+        "C" : 100,
+        "D" : 500,
+        "M" : 1000
+    };
+
     let sum = 0;
     let temp = s[0];
+    let cur;
 
     for(let i = 0 ; i < s.length; i++) {
+        cur = symbol[s[i]];
 
-        if(temp - value[symbol.indexOf(s[i])] < 0) {
-            sum = sum - temp + (value[symbol.indexOf(s[i])] - temp);
+        if(temp - cur < 0) {
+            sum = sum - temp + (cur - temp);
         }
         else {
-            temp = value[symbol.indexOf(s[i])];
+            temp = cur;
             sum += temp;
         }
 
