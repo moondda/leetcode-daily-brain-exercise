@@ -5,29 +5,26 @@
  */
 var subarraysWithKDistinct = function(nums, k) {
 
-    const atMost = (target) => {
-
+    const sWindow = (n) => {
         let left = 0;
-    const countMap = new Map();
-    let res = 0;
+        let count = 0;
+        let numMap = new Map();
+        for(let i=0; i<nums.length; i++) {
+            numMap.set(nums[i] , (numMap.get(nums[i]) || 0) + 1);
 
-    for(let i=0; i<nums.length; i++) {
-        countMap.set(nums[i] , (countMap.get(nums[i]) || 0) + 1);
-
-        while(countMap.size > target) {
-            //k가 될때까지 left 조정
-            countMap.set(nums[left] , countMap.get(nums[left]) - 1);
-            if(countMap.get(nums[left]) == 0) countMap.delete(nums[left]);
-            left += 1;
+            while(numMap.size > n) {
+                if( numMap.get(nums[left]) == 1) {
+                    numMap.delete(nums[left]);
+                }
+                else {
+                    numMap.set(nums[left] , numMap.get(nums[left]) - 1);
+                }
+                left += 1; //윈도우 축소
+            }
+            count += i-left + 1;
         }
-
-        res += (i-left+1);
-
+        console.log(numMap)
+        return count;
     }
-
-    return res;
-    }
-
-    return (atMost(k) - atMost(k-1))
-
+    return sWindow(k)- sWindow(k-1);
 };
