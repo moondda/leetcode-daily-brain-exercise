@@ -6,49 +6,42 @@
  //12시 45분
 var getHappyString = function(n, k) {
     let dp = Array(n+1).fill(0);
-    for(let i=1; i<= n ; i++) {
+
+    for(let i=1; i<=n ; i++) {
         dp[i] = 2**(i-1) + 2**(i-1) + 2**(i-1);
     }
+
     let leftOrder = k;
-    let leftLetterCount = n;
-    let result = [];
+    const result = [];
 
-    const isA = dp[leftLetterCount] / 3;
-    const isB = (2* dp[leftLetterCount]) / 3;
-
-    if(dp[leftLetterCount] < k) {
+    if(leftOrder > dp[n]) {
         return '';
     }
-    console.log(isA,leftOrder,dp,isB)
-    if(leftOrder <= isA) {
-            result.push('a');
-        }
-    else if(leftOrder <= isB) {
-            leftOrder -= isA;
-            result.push('b');
-        }
+
+    if(leftOrder <= dp[n]/3) {
+        result.push('a')
+    }
+    else if(leftOrder <= (2* dp[n])/3) {
+        result.push('b');
+        leftOrder -= dp[n]/3;
+    }
     else {
-            leftOrder -= isB;
-            result.push('c');
-        }
-    leftLetterCount -= 1;
-
-    const abcMap = {'a' : ['b','c'] , 'b' : ['a','c'] , 'c' : ['a','b']};
-
-    while(leftLetterCount > 0) {
-        const is1 =  2 **(leftLetterCount-1);
-        const prev = result.pop();
-        result.push(prev);
-
-        if(leftOrder <= is1) {
-            result.push(abcMap[prev][0]);
-        }
-        else {
-            leftOrder -= is1;
-            result.push(abcMap[prev][1]);
-        }
-        leftLetterCount -= 1;
+        result.push('c');
+        leftOrder -= (2*dp[n])/3;
     }
 
-    return result.join('');
+    let leftLetter = n - 1;
+    const letterMap = {'a': ['b','c'], 'b': ['a','c'], 'c': ['a','b']};
+
+    for(let i= leftLetter; i>0 ; i--) {
+        if(leftOrder <= 2 ** (i-1) ) {
+            result.push(letterMap[result.at(-1)][0]);
+        }
+        else {
+            result.push(letterMap[result.at(-1)][1]);
+            leftOrder -= 2 ** (i-1) ;
+        }
+    }
+
+    return result.join("")
 };
